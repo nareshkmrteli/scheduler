@@ -21,6 +21,7 @@ function App() {
   return (
   <ThemeProvider theme={theme}>
   <SchedulerContext>
+    <span>klkl</span>
     <Switch>
       <Route path={''}>
         <Scheduler/>
