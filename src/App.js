@@ -17,13 +17,11 @@ function App() {
        fontSize:14,
      }
     })
-
   return (
   <ThemeProvider theme={theme}>
   <SchedulerContext>
-    <span>klkl</span>
     <Switch>
-      <Route path={''}>
+      <Route path={`${path}scheduler/build`}>
         <Scheduler/>
       </Route>
     </Switch>
