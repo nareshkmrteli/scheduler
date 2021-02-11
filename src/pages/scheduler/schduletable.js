@@ -1,7 +1,9 @@
 import { Container, Dialog, makeStyles, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import React, { useState } from 'react';
 import { useSelector } from '../../redux/scheduler/scheduler';
+import { schedulerSetting } from '../../setting';
 import { AddOrRemove } from './addorupdate';
+
 const useStyles = makeStyles({
     table: {
       minWidth: 650,
@@ -22,8 +24,10 @@ const useStyles = makeStyles({
 
 export function SchedulerTable(props){
     const lb=new Date(Date.now())
+    lb.setDate(lb.getDate()-schedulerSetting.daysBackwordSchdule)
     const ub=new Date(Date.now())
-    ub.setMonth(ub.getMonth()+3)
+    ub.setDate(ub.getDate()+schedulerSetting.daysForwordSchdule)
+    
     const [formIntialValue, setFormIntialValue] = useState({})
     const [isUpdate, setIsUpdate] = useState(false)
     
@@ -78,7 +82,7 @@ function OptionSelectMonthDays({year,month,setYear,setMonth}){
     for(let i=0;i<12;i++)
         months.push(<option value={i} >{i+1}</option>)
     const nowyear=new Date(Date.now()).getFullYear()
-    for(let i=nowyear-2;i<=nowyear+2;i++)
+    for(let i=nowyear-schedulerSetting.yearsBackwordView;i<=nowyear+schedulerSetting.yearsForwordView;i++)
         years.push(<option value={i}>{i}</option>)
 
     return(

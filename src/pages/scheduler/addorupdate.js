@@ -5,11 +5,11 @@ import React, { useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { useDispatch } from '../../redux/scheduler/scheduler';
 
+
 export function AddOrRemove({intialformvalue,isupdate,setOpen,setIsupdate}){
     const [message, setMessage] = useState(null)
     const schedulerDispatch=useDispatch()
     function onSubmit(formdata){
-        alert('submit')
         if(formdata.actionType!='cancel'){
             delete formdata.actionType
             if(!isupdate){
@@ -17,9 +17,10 @@ export function AddOrRemove({intialformvalue,isupdate,setOpen,setIsupdate}){
                 setMessage('Schedule is added successfully')
                 setIsupdate(true)
             }
-            else
+            else{
                 schedulerDispatch({type:"UPDATE",data:formdata})
                 setMessage('Schedule is updated successfully')
+            }
         }else{
             schedulerDispatch({type:"DELETE",data:formdata})
             setMessage('Schedule is canceled')

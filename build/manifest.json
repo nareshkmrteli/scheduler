@@ -1,6 +1,6 @@
 {
   "short_name": "Scheduler",
-  "name": "Scheduler App",
+  "name": "A scheduler web app",
   "icons": [
     {
       "src": "favicon.ico",
