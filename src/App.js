@@ -22,7 +22,7 @@ function App() {
   <ThemeProvider theme={theme}>
   <SchedulerContext>
     <Switch>
-      <Route path={`${path}`}>
+      <Route path={''}>
         <Scheduler/>
       </Route>
     </Switch>
