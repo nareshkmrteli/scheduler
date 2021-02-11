@@ -1,4 +1,5 @@
-import { Container, Dialog, makeStyles, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import { Container, Dialog, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import { AddCircleOutline, RemoveCircleOutline } from '@material-ui/icons';
 import React, { useState } from 'react';
 import { useSelector } from '../../redux/scheduler/scheduler';
 import { schedulerSetting } from '../../setting';
@@ -16,6 +17,17 @@ const useStyles = makeStyles({
         padding:"5px",
         border:'1px black solid',
         fontSize:'.6em'
+    },
+    hoverRowAndColumn:{
+        backgroundColor:'red'
+    },
+    icons:{
+        boxShadow: "rgb(218 218 218) 0px 0px 6px 1px",
+        verticalAlign: "middle",
+        padding: "0px",
+        margin: "0px 9px",
+        borderRadius: "50%",
+        fontSize: "initial"
     }
     
     
@@ -78,25 +90,34 @@ export function SchedulerTable(props){
 }
 
 function OptionSelectMonthDays({year,month,setYear,setMonth}){
+    const classes=useStyles()
     let months=[],years=[]
     for(let i=0;i<12;i++)
         months.push(<option value={i} >{i+1}</option>)
     const nowyear=new Date(Date.now()).getFullYear()
-    for(let i=nowyear-schedulerSetting.yearsBackwordView;i<=nowyear+schedulerSetting.yearsForwordView;i++)
+    const year_start=nowyear-schedulerSetting.yearsBackwordView
+    const year_end=nowyear+schedulerSetting.yearsForwordView
+    for(let i=year_start;i<=year_end;i++)
         years.push(<option value={i}>{i}</option>)
 
     return(
         <>
         <br/>
-        <Container component={Paper} style={{padding:'5px 5px',verticalAlign:'center'}}>
-            <label>Month: </label>
-            <Select native defaultValue={month} onChange={(e)=>setMonth(e.target.value)} align='center'>
+        <Container component={Paper} style={{padding:'5px 15px',verticalAlign:'center',border:'1px #eeeeee solid'}}>
+            <b><label>Month: </label></b>
+            <RemoveCircleOutline className={classes.icons} onClick={()=>{setMonth(month==0?0:month-1)}}/>
+            <span>
+            <select defaultValue={month} value={month} onChange={(e)=>setMonth(e.target.value)} align='center' style={{border:'1px #eee dotted'}}>
                 {months}
-            </Select>
-            <label>Year: </label>
-            <Select native defaultValue={year} onChange={(e)=>{setYear(e.target.value)}} align='center'>
+            </select>
+            </span>
+            <AddCircleOutline className={classes.icons} onClick={()=>{setMonth(month==11?11:month+1)}} />
+            <b style={{marginLeft:"30px"}}><label>Year: </label></b>
+            <RemoveCircleOutline className={classes.icons} onClick={()=>{setYear(year==year_start?year:year-1)}}/>
+            <select defaultValue={year} value={year} onChange={(e)=>{setYear(e.target.value)}} align='center' style={{border:'1px #eee dotted'}}>
                 {years}
-            </Select>
+            </select>
+            <AddCircleOutline className={classes.icons} onClick={()=>{setYear(year==year_end?year:year+1)}} />
         </Container>
         <br/>
         </>
@@ -185,6 +206,7 @@ function dataToMatrix(data,month,year,lowerBoundDateTime,upperBoundDateTime){
 function CreateTable({data,month,year,lowerBoundDateTime,upperBoundDateTime,clickCallBack=console.log}){
     const matrix=dataToMatrix(data,month,year,lowerBoundDateTime,upperBoundDateTime)
     const classes = useStyles();
+    const [coordinate, setCoordinate] = useState(null)
     const colormaping=['white','red','#eeeeee']
     return(
         <TableContainer component={Paper}>
