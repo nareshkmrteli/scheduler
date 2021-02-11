@@ -27,7 +27,7 @@ export function SchedulerTable(props){
     const [formIntialValue, setFormIntialValue] = useState({})
     const [isUpdate, setIsUpdate] = useState(false)
     
-    const [open, setOpen] = useState(true)
+    const [open, setOpen] = useState(false)
     const [month, setMonth] = useState(lb.getMonth())
     const [year, setYear] = useState(lb.getFullYear())
     const scheduler = useSelector((data)=>{return data})
@@ -65,7 +65,7 @@ export function SchedulerTable(props){
             <OptionSelectMonthDays setMonth={setMonth} setYear={setYear} month={month} year={year} />
             <CreateTable data={scheduler} lowerBoundDateTime={lb} upperBoundDateTime={ub} month={month} year={year} clickCallBack={clickCallBack} />
             <Dialog open={open} onClose={()=>setOpen(false)}>
-                <AddOrRemove intialformvalue={formIntialValue} isupdate={isUpdate}/>
+                <AddOrRemove intialformvalue={formIntialValue} isupdate={isUpdate} setIsupdate={setIsUpdate} setOpen={setOpen}/>
             </Dialog>
             <br/>
             <br/>

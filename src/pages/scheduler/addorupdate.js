@@ -1,24 +1,42 @@
 import { Button, Container, Grid } from '@material-ui/core';
+import { Alert, AlertTitle } from '@material-ui/lab';
 import { TextField } from 'final-form-material-ui';
-import React from 'react';
+import React, { useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { useDispatch } from '../../redux/scheduler/scheduler';
 
-export function AddOrRemove({intialformvalue,isupdate}){
+export function AddOrRemove({intialformvalue,isupdate,setOpen,setIsupdate}){
+    const [message, setMessage] = useState(null)
     const schedulerDispatch=useDispatch()
     function onSubmit(formdata){
+        alert('submit')
         if(formdata.actionType!='cancel'){
             delete formdata.actionType
-            if(!isupdate)
+            if(!isupdate){
                 schedulerDispatch({type:"ADD",data:formdata})
+                setMessage('Schedule is added successfully')
+                setIsupdate(true)
+            }
             else
                 schedulerDispatch({type:"UPDATE",data:formdata})
+                setMessage('Schedule is updated successfully')
         }else{
             schedulerDispatch({type:"DELETE",data:formdata})
+            setMessage('Schedule is canceled')
+                setTimeout(()=>setOpen(false),2000)
         }
     }
     return(
         <Container>
+            {
+                message &&
+                <Alert severity='info'>
+                    <AlertTitle>
+                        {message}    
+                    </AlertTitle>
+                    
+                </Alert>
+            }
             <Form
                 onSubmit={onSubmit}
                 initialValues={intialformvalue}
@@ -40,7 +58,7 @@ export function AddOrRemove({intialformvalue,isupdate}){
                             <Button type='submit' onClick={()=>form.change('actionType','add')} variant='contained' color='primary' name='submit'>{isupdate?'Update':'Add' }</Button>
                             <span> </span>
                             {
-                                isupdate && <Button type='delete' onClick={()=>form.change('actionType','cancel')} variant='contained' color='secondary' name='cancel'>Cancel</Button>
+                                isupdate && <Button type='delete' onClick={()=>form.change('actionType','cancel')} variant='contained' color='secondary' name='cancel'>Cancel schedule</Button>
                             }
                         </Grid>
                         </Grid>
